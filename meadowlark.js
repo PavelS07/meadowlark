@@ -1,13 +1,6 @@
 let express = require('express');
+let fortune = require('./lib/fortune.js');
 let app = express();
-
-let fortunes = [
-    "Победи свои страхи, или они победят тебя.",
-    "Рекам нужны истоки.",
-    "Не бойся неведомого.",
-    "Тебя ждет приятный сюрприз.",
-    "Будь проще везде, где только можно.",
-];
 
 // установка механизма представления handlebars
 let handlebars = require('express-handlebars').create({ defaultlayout:'main' });
@@ -15,6 +8,12 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
+
+// установка тестов
+app.use(function(req, res, next){
+    res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
+    next();
+});
 
 // определяем папку со статическими данными
 app.use(express.static(__dirname + '/public'))
@@ -26,8 +25,7 @@ app.get('/', function (req, res) {
 
 // страница о
 app.get('/about', function (req, res) {
-    var randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-    res.render('about', { fortune: randomFortune });
+    res.render('about', { fortune: fortune.getFortune() });
 });
 
 
