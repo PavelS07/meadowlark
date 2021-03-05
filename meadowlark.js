@@ -3,7 +3,15 @@ let fortune = require('./lib/fortune.js');
 let app = express();
 
 // установка механизма представления handlebars
-let handlebars = require('express-handlebars').create({ defaultlayout:'main' });
+let handlebars = require('express-handlebars').create(
+    { defaultlayout:'main',
+            helpers:{
+            section:function(name, options){
+                if(!this._sections){this._sections = {}};
+                this._sections[name] = options.fn(this);
+                return null;
+            }
+            }});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -23,10 +31,24 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
+// страница тура
+app.get('/tours/hood-river', function (req, res) {
+    res.render('tours/hood-river');
+});
+
+// страница запрос цены
+app.get('/tours/request-group-rate', function (req, res) {
+    res.render('tours/request-group-rate');
+});
+
 // страница о
 app.get('/about', function (req, res) {
-    res.render('about', { fortune: fortune.getFortune() });
+    res.render('about', {
+        fortune: fortune.getFortune(),
+        pageTestScript: '/qa/tests-about.js'
+    });
 });
+
 
 
 // пользовательская страница 404
