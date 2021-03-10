@@ -8,7 +8,7 @@ suite('Межстраничные тесты', function(){
         browser = new Browser();
     });
 
-test('запрос расценок для групп со страницы туров по реке Худ'
+test('запрос расценок для групп со страницы туров по реке Худ '
     + 'должен заполнять поле реферера', function(done){
     let referrer = domainName + '/tours/hood-river';
     browser.visit(referrer, function(){

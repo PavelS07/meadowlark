@@ -17,14 +17,15 @@ app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
 
+// определяем папку со статическими данными
+app.use(express.static(__dirname + '/public'))
+
+
 // установка тестов
 app.use(function(req, res, next){
     res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
     next();
 });
-
-// определяем папку со статическими данными
-app.use(express.static(__dirname + '/public'))
 
 // главная страница
 app.get('/', function (req, res) {
@@ -33,6 +34,11 @@ app.get('/', function (req, res) {
 
 // страница тура
 app.get('/tours/hood-river', function (req, res) {
+    res.render('tours/hood-river');
+});
+
+// страница пансионата
+app.get('/tours/oregon-coast', function (req, res) {
     res.render('tours/hood-river');
 });
 
